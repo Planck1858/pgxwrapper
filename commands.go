@@ -19,8 +19,8 @@ func (d *DB) Get(ctx context.Context, dest interface{}, query string, args ...in
 	return err
 }
 
-// Getx get SQL command with Sqlizer
-func (d *DB) Getx(ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error {
+// GetSq get SQL command with Sqlizer
+func (d *DB) GetSq(ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error {
 	if !d.isActive {
 		return ErrDBIsNotActive
 	}
@@ -46,8 +46,8 @@ func (d *DB) Select(ctx context.Context, dest interface{}, query string, args ..
 	return err
 }
 
-// Selectx select SQL command with Sqlizer
-func (d *DB) Selectx(ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error {
+// SelectSq select SQL command with Sqlizer
+func (d *DB) SelectSq(ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error {
 	if !d.isActive {
 		return ErrDBIsNotActive
 	}
@@ -62,8 +62,8 @@ func (d *DB) Selectx(ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) 
 	return err
 }
 
-// SelectToMap select SQL command with Sqlizer with map destination
-func (d *DB) SelectToMap(ctx context.Context, cb func(value map[string]interface{}), sqlizer sq.Sqlizer) error {
+// SelectToMapSq select SQL command with Sqlizer with map destination
+func (d *DB) SelectToMapSq(ctx context.Context, cb func(value map[string]interface{}), sqlizer sq.Sqlizer) error {
 	if !d.isActive {
 		return ErrDBIsNotActive
 	}
@@ -103,8 +103,8 @@ func (d *DB) Insert(ctx context.Context, query string, args ...interface{}) erro
 	return err
 }
 
-// Insertx insert SQL command with Sqlizer
-func (d *DB) Insertx(ctx context.Context, sqlizer sq.Sqlizer) error {
+// InsertSq insert SQL command with Sqlizer
+func (d *DB) InsertSq(ctx context.Context, sqlizer sq.Sqlizer) error {
 	if !d.isActive {
 		return ErrDBIsNotActive
 	}
@@ -130,8 +130,8 @@ func (d *DB) Delete(ctx context.Context, query string, args ...interface{}) erro
 	return err
 }
 
-// Deletex delete SQL command with Sqlizer
-func (d *DB) Deletex(ctx context.Context, sqlizer sq.Sqlizer) error {
+// DeleteSq delete SQL command with Sqlizer
+func (d *DB) DeleteSq(ctx context.Context, sqlizer sq.Sqlizer) error {
 	if !d.isActive {
 		return ErrDBIsNotActive
 	}
@@ -157,8 +157,8 @@ func (d *DB) Update(ctx context.Context, query string, args ...interface{}) erro
 	return err
 }
 
-// Updatex update SQL command with Sqlizer
-func (d *DB) Updatex(ctx context.Context, sqlizer sq.Sqlizer) error {
+// UpdateSq update SQL command with Sqlizer
+func (d *DB) UpdateSq(ctx context.Context, sqlizer sq.Sqlizer) error {
 	if !d.isActive {
 		return ErrDBIsNotActive
 	}
@@ -184,8 +184,8 @@ func (d *DB) Exec(ctx context.Context, query string, args ...interface{}) error 
 	return err
 }
 
-// Execx execute SQL command with Sqlizer
-func (d *DB) Execx(ctx context.Context, sqlizer sq.Sqlizer) error {
+// ExecSq execute SQL command with Sqlizer
+func (d *DB) ExecSq(ctx context.Context, sqlizer sq.Sqlizer) error {
 	if !d.isActive {
 		return ErrDBIsNotActive
 	}

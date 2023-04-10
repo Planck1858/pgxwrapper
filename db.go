@@ -8,12 +8,6 @@ import (
 
 	_ "github.com/jackc/pgx/stdlib"
 	"github.com/jmoiron/sqlx"
-	"github.com/pkg/errors"
-)
-
-var (
-	ErrDBIsNotActive   = errors.New("connect not active")
-	ErrTooMuchAttempts = errors.New("database closed: too much attempts")
 )
 
 type config struct {
