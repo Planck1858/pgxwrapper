@@ -62,8 +62,8 @@ func (d *DB) SelectSq(ctx context.Context, dest interface{}, sqlizer sq.Sqlizer)
 	return err
 }
 
-// SelectToMapSq select SQL command with Sqlizer with map destination
-func (d *DB) SelectToMapSq(ctx context.Context, cb func(value map[string]interface{}), sqlizer sq.Sqlizer) error {
+// SelectToMapSq select SQL command with Sqlizer with mapper function
+func (d *DB) SelectToMapSq(ctx context.Context, dest map[string]interface{}, sqlizer sq.Sqlizer) error {
 	if !d.isActive {
 		return ErrDBIsNotActive
 	}
@@ -73,26 +73,22 @@ func (d *DB) SelectToMapSq(ctx context.Context, cb func(value map[string]interfa
 		return err
 	}
 
-	rows, err := d.db.Queryx(query, args...)
+	rows, err := d.db.QueryxContext(ctx, query, args...)
 	if err != nil {
 		return err
 	}
 
 	for rows.Next() {
-		results := make(map[string]interface{}, 1)
-		err = rows.MapScan(results)
+		err = rows.MapScan(dest)
 		if err != nil {
 			return err
-		}
-		if cb != nil {
-			cb(results)
 		}
 	}
 
 	return err
 }
 
-// Insert inser SQL command
+// Insert insert SQL command
 func (d *DB) Insert(ctx context.Context, query string, args ...interface{}) error {
 	if !d.isActive {
 		return ErrDBIsNotActive

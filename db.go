@@ -17,6 +17,7 @@ type config struct {
 	enableLogs bool
 }
 
+// DB database main struct
 type DB struct {
 	isActive bool
 	db       *sqlx.DB
@@ -26,13 +27,15 @@ type DB struct {
 	config *config
 }
 
+// Open create db entity and start connection to database
 func Open(opts ...option) *DB {
 	ctx := context.Background()
 	c, cf := context.WithCancel(ctx)
 
+	// default config
 	conf := &config{
 		dsn:      "",
-		ticker:   time.Second,
+		ticker:   time.Second * 5,
 		attempts: 5,
 	}
 
@@ -51,10 +54,12 @@ func Open(opts ...option) *DB {
 	return db
 }
 
+// GetDB get sqlx database
 func (d *DB) GetDB() *sql.DB {
 	return d.db.DB
 }
 
+// IsActive get connection status
 func (d *DB) IsActive() bool {
 	return d.isActive
 }
@@ -73,7 +78,10 @@ func (d *DB) init() {
 				switch d.isActive {
 				case true:
 					if err := d.db.Ping(); err != nil {
-						log.Printf("DB failed on ping connection: %s", err)
+						if d.config.enableLogs {
+							log.Printf("DB failed on ping connection: %s", err)
+						}
+
 						d.isActive = false
 						break
 					}
@@ -81,13 +89,20 @@ func (d *DB) init() {
 				default:
 					if attempts == d.config.attempts {
 						d.close()
-						log.Fatalf("DB failed on connect: %s\n", ErrTooMuchAttempts)
+
+						if d.config.enableLogs {
+							log.Fatalf("DB failed on connect: %s\n", ErrTooMuchAttempts)
+						}
+
 						return
 					}
 
 					err := d.connect()
 					if err != nil {
-						log.Printf("DB failed on connect: %s", err)
+						if d.config.enableLogs {
+							log.Printf("DB failed on connect: %s", err)
+						}
+
 						attempts++
 						break
 					}
@@ -112,15 +127,21 @@ func (d *DB) connect() error {
 	d.db = db
 	d.isActive = true
 
-	log.Print("success connection to DB")
+	if d.config.enableLogs {
+		log.Print("success connection to DB")
+	}
 
 	return nil
 }
 
+// Close kill database connection and cancel context
 func (d *DB) Close() {
 	d.close()
 	d.cancel()
-	log.Print("connection to DB closed")
+
+	if d.config.enableLogs {
+		log.Print("connection to DB closed")
+	}
 }
 
 func (d *DB) close() {
