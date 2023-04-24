@@ -1,5 +1,5 @@
 # pgxwrapper
-Simple wrapper for postgresql
+Simple wrapper for PostgreSQL using pgx and sqlx
 
 Example:
 ```go
