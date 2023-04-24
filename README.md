@@ -1,5 +1,5 @@
 # pgxwrapper
-Simple wrapper for PostgreSQL using pgx and sqlx
+Simple wrapper for PostgreSQL using pgx and sqlx + squirrel
 
 Example:
 ```go
@@ -17,8 +17,9 @@ ctx := context.Background()
 
 // Fields should be public
 type user struct {
-    Id string   `db:"id"`
-	Name string `db:"name"`
+    Id string   	`db:"id"`
+    Name string 	`db:"name"`
+    CreatedAt time.Time `db:"created_at"`
 }
 
 // Get
