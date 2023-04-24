@@ -25,7 +25,7 @@ type user struct {
 
 // Get
 var getId string
-err := db.Get(ctx, getId, "SELECT id, name FROM users WHERE ", nil)
+err := db.Get(ctx, getId, "SELECT id, name FROM users WHERE id = 1")
 errCheck(err)
 
 // Select
