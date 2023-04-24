@@ -7,8 +7,9 @@ package main
 
 import "github.com/Planck1858/pgxwrapper"
 
+dsn := "host=localhost:5432 user=user dbname=db password=password sslmode=disable"
 db := pgxwrapper.Open(
-    pgxwrapper.OptionDSN("host=localhost:5432 user=user dbname=db password=password sslmode=disable"), // standard postgresql DSN
+    pgxwrapper.OptionDSN(dsn),              // standard postgresql DSN
     pgxwrapper.OptionTicker(time.Second*5), // how often check db's connection (and reconnect)
     pgxwrapper.OptionAttempts(10),          // attempts to connect to db
     pgxwrapper.OptionEnableLogs(true))      // use standard Go's log for errors/warnings on connection
