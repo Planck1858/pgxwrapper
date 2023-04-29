@@ -19,7 +19,7 @@ type PgDatabase interface {
 	GetSq(ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error
 	Select(ctx context.Context, dest interface{}, query string, args ...interface{}) error
 	SelectSq(ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error
-	SelectToMapSq(ctx context.Context, cb func(value map[string]interface{}), sqlizer sq.Sqlizer) error
+	SelectToMapSq(ctx context.Context, dest map[string]interface{}, sqlizer sq.Sqlizer) error
 	Insert(ctx context.Context, query string, args ...interface{}) error
 	InsertSq(ctx context.Context, sqlizer sq.Sqlizer) error
 	Delete(ctx context.Context, query string, args ...interface{}) error
