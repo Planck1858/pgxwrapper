@@ -136,11 +136,11 @@ tx, err := db.Tx(ctx, nil)
 errCheck(err)
 
 defer func(){
-	if err != nil {
-		tx.Rollback()
-    } else {
-		tx.Commit()
-    }
+  if err != nil {
+    tx.Rollback()
+  } else {
+    tx.Commit()
+  }
 }()
 
 res, err := tx.ExecContext(ctx, "UPDATE users SET name = $1 WHERE id = $2;", "new_name", userId)
