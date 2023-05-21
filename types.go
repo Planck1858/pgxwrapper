@@ -15,6 +15,9 @@ var (
 )
 
 type PgDatabase interface {
+	GetDB() *sql.DB
+	IsActive() bool
+
 	Get(ctx context.Context, dest interface{}, query string, args ...interface{}) error
 	GetSq(ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error
 	Select(ctx context.Context, dest interface{}, query string, args ...interface{}) error
