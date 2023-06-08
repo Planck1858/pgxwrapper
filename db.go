@@ -11,10 +11,11 @@ import (
 )
 
 type config struct {
-	dsn        string
-	ticker     time.Duration
-	attempts   int
-	enableLogs bool
+	dsn            string
+	ticker         time.Duration
+	attempts       int
+	enableLogs     bool
+	startedChannel chan bool
 }
 
 // DB database main struct
@@ -34,9 +35,11 @@ func Open(opts ...option) *DB {
 
 	// default config
 	conf := &config{
-		dsn:      "",
-		ticker:   time.Second * 5,
-		attempts: 5,
+		dsn:            "",
+		ticker:         time.Second * 5,
+		attempts:       5,
+		enableLogs:     false,
+		startedChannel: nil,
 	}
 
 	for _, o := range opts {
@@ -108,6 +111,7 @@ func (d *DB) init() {
 					}
 
 					d.isActive = true
+					d.config.startedChannel <- true
 				}
 			}
 		}

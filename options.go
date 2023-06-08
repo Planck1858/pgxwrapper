@@ -31,3 +31,10 @@ func OptionEnableLogs(el bool) option {
 		c.enableLogs = el
 	}
 }
+
+// OptionStartedChannel channel that will return true when connection is active
+func OptionStartedChannel(ch chan bool) option {
+	return func(c *config) {
+		c.startedChannel = ch
+	}
+}
