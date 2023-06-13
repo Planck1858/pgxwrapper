@@ -64,7 +64,7 @@ func Open(opts ...option) (*DB, error) {
 
 	startCh := make(chan struct{})
 	startErrCh := make(chan error)
-	db.init(startCh, startErrCh)
+	go db.init(startCh, startErrCh)
 
 	select {
 	case <-startCh:
