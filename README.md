@@ -1,5 +1,12 @@
 # pgxwrapper
-Simple wrapper for PostgreSQL using pgx and sqlx + squirrel
+Simple wrapper for PostgreSQL using pgx, sqlx and squirrel
+
+Features:
+- Compatibility with squirrel
+- Pinging db connection with a ticker
+- Optional receive errors through error channel. Do with it what you want :)
+- Custom attempts to connect. If attempts is reach their maximum, db connection will close
+- Optional log errors 
 
 Dependencies:
 - github.com/jackc/pgx
@@ -7,6 +14,8 @@ Dependencies:
 - github.com/Masterminds/squirrel
 
 Commands (PgDatabase interface):
+- GetDB() *sql.DB
+- IsActive() bool
 - Get(ctx context.Context, dest interface{}, query string, args ...interface{}) error
 - GetSq(ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error
 - Select(ctx context.Context, dest interface{}, query string, args ...interface{}) error
@@ -28,23 +37,36 @@ package main
 
 import "github.com/Planck1858/pgxwrapper"
 
+// Optional error channel
+errCh := make(chan error)
+
 // Open (with options)
-dsn := "host=localhost:5432 user=user dbname=db password=password sslmode=disable"
-db := pgxwrapper.Open(
-    pgxwrapper.OptionDSN(dsn),              // standard postgresql DSN
-    pgxwrapper.OptionTicker(time.Second*5), // how often check db's connection (and reconnect)
-    pgxwrapper.OptionAttempts(10),          // attempts to connect to db
-    pgxwrapper.OptionEnableLogs(true))      // use standard Go's log for errors/warnings on connection
+dsn := "host=localhost user=user dbname=db password=password sslmode=disable"
+db, err := pgxwrapper.Open(
+    pgxwrapper.OptionDSN(dsn),               // standard postgresql DSN
+    pgxwrapper.OptionEnableLogs(true))       // use standard Go's log for errors/warnings on connection
+    pgxwrapper.OptionTicker(time.Second*10), // how often check db's connection (and reconnect). Default = 5 sec 
+    pgxwrapper.OptionAttempts(10),           // attempts to connect to db. Default = 0
+    pgxwrapper.OptionErrorChannel(errCh),    // optional error channel that sends errors on connection attempts
+)
+if err != nil {
+	panic(err) // error will cause after first 2 attempts to connect to db or if options are invalid
+}
 
-ctx := context.Background()
+// If you using errCh, then you NEED to receive them
+go func() {
+	<- errCh
+	db.Close()
+}()
 
-// Fields should be public
+// Fields should be public!
 type user struct {
     Id        string   	`db:"id"`
     Name      string 	`db:"name"`
     CreatedAt time.Time `db:"created_at"`
 }
 
+ctx := context.Background()
 userId := "eeb6dcb6-0a95-4b30-9b5b-a6e2d09d972b"
 
 // Get

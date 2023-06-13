@@ -12,6 +12,8 @@ import (
 var (
 	ErrDBIsNotActive   = errors.New("connect not active")
 	ErrTooMuchAttempts = errors.New("database closed: too much attempts")
+	ErrEmptyDSN        = errors.New("empty dsn")
+	ErrInvalidAttempts = errors.New("invalid attempts number, must be > 0")
 )
 
 type PgDatabase interface {
