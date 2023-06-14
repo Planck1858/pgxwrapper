@@ -62,8 +62,8 @@ func Open(opts ...option) (*DB, error) {
 		config: conf,
 	}
 
-	startCh := make(chan struct{})
-	startErrCh := make(chan error)
+	startCh := make(chan struct{}, 1)
+	startErrCh := make(chan error, 1)
 	go db.init(startCh, startErrCh)
 
 	select {
@@ -101,6 +101,7 @@ func (d *DB) init(startCh chan struct{}, startErrCh chan error) {
 	go func() {
 		defer d.close()
 		attempts := 0
+		wasAtLeastOneSuccConn := false
 
 		for range time.Tick(d.config.ticker) {
 			select {
@@ -140,8 +141,12 @@ func (d *DB) init(startCh chan struct{}, startErrCh chan error) {
 							log.Printf("DB failed to connect: %s", err)
 						}
 
-						if attempts == twoAttempts {
+						// If after two attempts we have no connection at all, then we close the function
+						// If we had at least on successful connection, then we send errors to errorCh
+						if !wasAtLeastOneSuccConn && attempts == twoAttempts {
 							startErrCh <- err
+							close(startErrCh)
+							close(startCh)
 
 							return
 						}
@@ -155,8 +160,12 @@ func (d *DB) init(startCh chan struct{}, startErrCh chan error) {
 						break
 					}
 
-					if attempts < twoAttempts {
+					if !wasAtLeastOneSuccConn && attempts <= twoAttempts {
 						startCh <- struct{}{}
+						close(startErrCh)
+						close(startCh)
+
+						wasAtLeastOneSuccConn = true
 					}
 				}
 			}
