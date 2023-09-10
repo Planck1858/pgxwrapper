@@ -33,5 +33,19 @@ type PgDatabase interface {
 	UpdateSq(ctx context.Context, sqlizer sq.Sqlizer) error
 	Exec(ctx context.Context, query string, args ...interface{}) error
 	ExecSq(ctx context.Context, sqlizer sq.Sqlizer) error
+
 	Tx(ctx context.Context, opts *sql.TxOptions) (*sqlx.Tx, error)
+	GetTx(tx *sqlx.Tx, ctx context.Context, dest interface{}, query string, args ...interface{}) error
+	GetSqTx(tx *sqlx.Tx, ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error
+	SelectTx(tx *sqlx.Tx, ctx context.Context, dest interface{}, query string, args ...interface{}) error
+	SelectSqTx(tx *sqlx.Tx, ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error
+	SelectToMapSqTx(tx *sqlx.Tx, ctx context.Context, dest map[string]interface{}, sqlizer sq.Sqlizer) error
+	InsertTx(tx *sqlx.Tx, ctx context.Context, query string, args ...interface{}) error
+	InsertSqTx(tx *sqlx.Tx, ctx context.Context, sqlizer sq.Sqlizer) error
+	DeleteTx(tx *sqlx.Tx, ctx context.Context, query string, args ...interface{}) error
+	DeleteSqTx(tx *sqlx.Tx, ctx context.Context, sqlizer sq.Sqlizer) error
+	UpdateTx(tx *sqlx.Tx, ctx context.Context, query string, args ...interface{}) error
+	UpdateSqTx(tx *sqlx.Tx, ctx context.Context, sqlizer sq.Sqlizer) error
+	ExecTx(tx *sqlx.Tx, ctx context.Context, query string, args ...interface{}) error
+	ExecSqTx(tx *sqlx.Tx, ctx context.Context, sqlizer sq.Sqlizer) error
 }
