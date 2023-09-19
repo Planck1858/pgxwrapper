@@ -18,6 +18,7 @@ Simple wrapper for PostgreSQL using pgx, sqlx and squirrel
 ### Database
 1. ```GetDB() *sql.DB```
 1. ```IsActive() bool```
+1. ```Close() error```
 ### Without trasactions
 1. ```Get(ctx context.Context, dest interface{}, query string, args ...interface{}) error```
 1. ```GetSq(ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error```
