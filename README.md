@@ -3,9 +3,10 @@ Simple wrapper for PostgreSQL using pgx, sqlx and squirrel
 
 ## Features:
 - Compatibility with squirrel
-- Pinging db connection with a ticker
-- Optional receive errors through error channel. Do with it what you want :)
+- Transactions methods with squirrel
+- Background pinging DB connection with a ticker
 - Custom attempts to connect. If attempts is reach their maximum, db connection will close
+- Optional receive errors through error channel
 - Optional log errors 
 
 ## Dependencies:
@@ -46,6 +47,13 @@ Simple wrapper for PostgreSQL using pgx, sqlx and squirrel
 1. ```UpdateSqTx(tx *sqlx.Tx, ctx context.Context, sqlizer sq.Sqlizer) error```
 1. ```ExecTx(tx *sqlx.Tx, ctx context.Context, query string, args ...interface{}) error```
 1. ```ExecSqTx(tx *sqlx.Tx, ctx context.Context, sqlizer sq.Sqlizer) error```
+
+## Options
+1. OptionDSN - dsn for connection, example: "host=localhost user=user dbname=db password=123 sslmode=disable"
+1. OptionTicker - stands for how often wrapper will check is connection active
+1. OptionAttempts - attempts to connect to db. Default is two attempts
+1. OptionEnableLogs - enable logging errors and successful attempts to connect using default Golang logger
+1. OptionErrorChannel - channel that sends sqlx errors on connection attempts or ErrTooMuchAttempts
 
 ## Example
 ```go
