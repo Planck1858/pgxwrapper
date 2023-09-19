@@ -1,37 +1,53 @@
 # pgxwrapper
 Simple wrapper for PostgreSQL using pgx, sqlx and squirrel
 
-Features:
+## Features:
 - Compatibility with squirrel
 - Pinging db connection with a ticker
 - Optional receive errors through error channel. Do with it what you want :)
 - Custom attempts to connect. If attempts is reach their maximum, db connection will close
 - Optional log errors 
 
-Dependencies:
+## Dependencies:
 - github.com/jackc/pgx
 - github.com/jmoiron/sqlx
 - github.com/Masterminds/squirrel
 
-Commands (PgDatabase interface):
-- GetDB() *sql.DB
-- IsActive() bool
-- Get(ctx context.Context, dest interface{}, query string, args ...interface{}) error
-- GetSq(ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error
-- Select(ctx context.Context, dest interface{}, query string, args ...interface{}) error
-- SelectSq(ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error
-- SelectToMapSq(ctx context.Context, dest map[string]interface{}, sqlizer sq.Sqlizer) error
-- Insert(ctx context.Context, query string, args ...interface{}) error
-- InsertSq(ctx context.Context, sqlizer sq.Sqlizer) error
-- Delete(ctx context.Context, query string, args ...interface{}) error
-- DeleteSq(ctx context.Context, sqlizer sq.Sqlizer) error
-- Update(ctx context.Context, query string, args ...interface{}) error
-- UpdateSq(ctx context.Context, sqlizer sq.Sqlizer) error
-- Exec(ctx context.Context, query string, args ...interface{}) error
-- ExecSq(ctx context.Context, sqlizer sq.Sqlizer) error
-- Tx(ctx context.Context, opts *sql.TxOptions) (*sqlx.Tx, error)
+## Commands (PgDatabase interface):
+### Database
+1. ```GetDB() *sql.DB```
+1. ```IsActive() bool```
+### Without trasactions
+1. ```Get(ctx context.Context, dest interface{}, query string, args ...interface{}) error```
+1. ```GetSq(ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error```
+1. ```Select(ctx context.Context, dest interface{}, query string, args ...interface{}) error```
+1. ```SelectSq(ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error```
+1. ```SelectToMapSq(ctx context.Context, dest map[string]interface{}, sqlizer sq.Sqlizer) error```
+1. ```Insert(ctx context.Context, query string, args ...interface{}) error```
+1. ```InsertSq(ctx context.Context, sqlizer sq.Sqlizer) error```
+1. ```Delete(ctx context.Context, query string, args ...interface{}) error```
+1. ```DeleteSq(ctx context.Context, sqlizer sq.Sqlizer) error```
+1. ```Update(ctx context.Context, query string, args ...interface{}) error```
+1. ```UpdateSq(ctx context.Context, sqlizer sq.Sqlizer) error```
+1. ```Exec(ctx context.Context, query string, args ...interface{}) error```
+1. ```ExecSq(ctx context.Context, sqlizer sq.Sqlizer) error```
+### With trasactions
+1. ```Tx(ctx context.Context, opts *sql.TxOptions) (*sqlx.Tx, error)```
+1. ```GetTx(tx *sqlx.Tx, ctx context.Context, dest interface{}, query string, args ...interface{}) error```
+1. ```GetSqTx(tx *sqlx.Tx, ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error```
+1. ```SelectTx(tx *sqlx.Tx, ctx context.Context, dest interface{}, query string, args ...interface{}) error```
+1. ```SelectSqTx(tx *sqlx.Tx, ctx context.Context, dest interface{}, sqlizer sq.Sqlizer) error```
+1. ```SelectToMapSqTx(tx *sqlx.Tx, ctx context.Context, dest map[string]interface{}, sqlizer sq.Sqlizer) error```
+1. ```InsertTx(tx *sqlx.Tx, ctx context.Context, query string, args ...interface{}) error```
+1. ```InsertSqTx(tx *sqlx.Tx, ctx context.Context, sqlizer sq.Sqlizer) error```
+1. ```DeleteTx(tx *sqlx.Tx, ctx context.Context, query string, args ...interface{}) error```
+1. ```DeleteSqTx(tx *sqlx.Tx, ctx context.Context, sqlizer sq.Sqlizer) error```
+1. ```UpdateTx(tx *sqlx.Tx, ctx context.Context, query string, args ...interface{}) error```
+1. ```UpdateSqTx(tx *sqlx.Tx, ctx context.Context, sqlizer sq.Sqlizer) error```
+1. ```ExecTx(tx *sqlx.Tx, ctx context.Context, query string, args ...interface{}) error```
+1. ```ExecSqTx(tx *sqlx.Tx, ctx context.Context, sqlizer sq.Sqlizer) error```
 
-Example:
+## Example
 ```go
 package main
 
