@@ -194,26 +194,31 @@ func (d *DB) connect() error {
 }
 
 // Close cancel database connection and cancel context
-func (d *DB) Close() {
-	d.close()
+func (d *DB) Close() error {
+	defer d.cancel()
+	err := d.close()
+	if err != nil {
+		return err
+	}
+
 	if d.isLogEnabled() {
 		log.Print("connection to DB is closed")
 	}
 
-	d.cancel()
+	return nil
 }
 
-func (d *DB) close() {
+func (d *DB) close() error {
 	if d.isActive {
 		err := d.db.Close()
 		if err != nil {
-			if d.isLogEnabled() {
-				log.Printf("error on close DB: %s", err)
-			}
+			return err
 		}
 
 		d.isActive = false
 	}
+
+	return nil
 }
 
 func (d *DB) isLogEnabled() bool {
