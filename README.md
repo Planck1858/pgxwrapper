@@ -50,7 +50,7 @@ Simple wrapper for PostgreSQL using pgx, sqlx and squirrel
 
 ## Options
 1. OptionDSN - dsn for connection, example: "host=localhost user=user dbname=db password=123 sslmode=disable"
-1. OptionTicker - stands for how often wrapper will check is connection active
+1. OptionTicker - stands for how often wrapper will check is connection active. Default is 5 sec
 1. OptionAttempts - attempts to connect to db. Default is two attempts
 1. OptionEnableLogs - enable logging errors and successful attempts to connect using default Golang logger
 1. OptionErrorChannel - channel that sends sqlx errors on connection attempts or ErrTooMuchAttempts
