@@ -70,7 +70,7 @@ db, err := pgxwrapper.Open(
     pgxwrapper.OptionDSN(dsn),               // standard postgresql DSN
     pgxwrapper.OptionEnableLogs(true))       // use standard Go's log for errors/warnings on connection
     pgxwrapper.OptionTicker(time.Second*10), // how often check db's connection (and reconnect). Default = 5 sec 
-    pgxwrapper.OptionAttempts(10),           // attempts to connect to db. Default = 0
+    pgxwrapper.OptionAttempts(10),           // attempts to connect to db. Default = 2
     pgxwrapper.OptionErrorChannel(errCh),    // optional error channel that sends errors on connection attempts
 )
 if err != nil {
